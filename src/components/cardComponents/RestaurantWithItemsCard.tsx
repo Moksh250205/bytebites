@@ -1,0 +1,57 @@
+"use client";
+
+import React from "react";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import type { Restaurant } from "@/types/frontend/types";
+
+interface RestaurantWithItemsCardProps {
+  restaurant: Restaurant;
+}
+
+const RestaurantWithItemsCard: React.FC<RestaurantWithItemsCardProps> = ({ restaurant }) => (
+  <Card className="w-full bg-white dark:bg-gray-800 shadow-md">
+    <CardContent className="p-4">
+      <div className="flex justify-between items-start">
+        <div>
+          <CardTitle className="font-semibold text-lg">{restaurant.name}</CardTitle>
+          <p className="text-sm text-gray-600 dark:text-gray-300">
+            {restaurant.description}
+          </p>
+        </div>
+        <Badge variant={restaurant.isCurrentlyOpen ? "default" : "secondary"}>
+          {restaurant.isCurrentlyOpen ? "Open" : "Closed"}
+        </Badge>
+      </div>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {restaurant.cuisine?.map((cuisine, i) => (
+          <Badge key={i} variant="outline">
+            {cuisine}
+          </Badge>
+        ))}
+      </div>
+      {restaurant.matchingItems && restaurant.matchingItems.length > 0 && (
+        <div className="mt-2">
+          <h4 className="text-sm font-semibold">Matching Items:</h4>
+          <ul className="list-disc list-inside text-sm">
+            {restaurant.matchingItems.map((item) => (
+              <li key={item.itemId}>
+                {item.name} (₹{item.basePrice}) - {item.type} / {item.category}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <div className="mt-2">
+        <span className="text-sm">
+          Price Range: {"₹".repeat(restaurant.priceRange)}
+        </span>
+        {restaurant.rating && (
+          <span className="ml-4 text-sm">Rating: {restaurant.rating}⭐</span>
+        )}
+      </div>
+    </CardContent>
+  </Card>
+);
+
+export default RestaurantWithItemsCard;
